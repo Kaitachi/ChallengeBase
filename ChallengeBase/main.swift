@@ -7,9 +7,7 @@
 
 import Foundation
 
-print("Hello, World!")
-
-var solution = Day01(algorithm: .part02)
-let scenarios = ["part02"]
+var solution = Solution00(algorithm: .part01)
+let scenarios = ["part01"]
 
 solution.execute(scenarios: scenarios)
