@@ -7,112 +7,140 @@
 
 import Foundation
 
+enum FileTypes : String {
+    case input = "in"
+    case output = "out"
+}
+
 extension Solution where Self: ChallengeSettings & Solution {
     static var solution: String {
         get { return String(describing: self) }
     }
     
-    func assert() -> [TestResult] {
-        let testResults = self.testCases
-            .map { testCase in
-                (test: testCase, result: self.act(testCase.input))
-                
-            }
-            .map { testCase in
-                (input: testCase.test.input,
-                 expectedOutput: testCase.test.output,
-                 actualOutput: testCase.result,
-                 isSuccessful: testCase.test.output == testCase.result
-                )
-            }
+    
+    /// Logic to assemble all scenarios parting from the selected datasets, broken down one by one
+    mutating func assembleAll(algorithm: Algorithms) {
+        self.datasets = []
         
-        return testResults
+        self.selectedDatasets.forEach { dataset in
+            self.datasets.append(assembleSingle(dataset, algorithm)!)
+        }
     }
     
-    func readFile(scenario: String?, isTest: Bool = true) {
-        let currentScenario = (isTest && scenario != nil) ? ".\(scenario!)" : ""
-        let relativePath = "\(Self.challengeName)/\(Self.solution)\(currentScenario)"
-        let path = "\(Self.basePath)/\(relativePath)"
+    mutating func assembleSingle(_ dataset: String, _ algorithm: Algorithms) -> TestCase<Input, Output>? {
+        do {
+            // Read relevant Dataset
+            let inputData = try readDataSet(type: .input, named: dataset, algorithm: algorithm)
+            let outputData = try readDataSet(type: .output, named: dataset, algorithm: algorithm)
+            
+            let assembled = assemble(inputData, outputData)
         
-        print("> Reading files for \(relativePath)...")
+            // Wrap assembled Dataset as a TestCase object
+            return TestCase<Input, Output>(algorithm: algorithm, input: assembled.0, output: assembled.1)
+        } catch let error as NSError {
+            print("Something went wrong whilst attempting to assemble scenarios... \(error)")
+            return nil
+        }
+    }
+    
+    func readDataSet(type: FileTypes, named dataset: String? = nil, algorithm: Algorithms? = nil) throws -> String {
+        // Lets assume the following regarding the files being used...
+        //
+        // 1. File formats should be:
+        //    a. for input file:    `<solution>[.<dataset>][.<algorithm>].in`
+        //
+        //    b. for output file:   `<solution>[.<dataset>][.<algorithm>].out`
+        //
+        // 2. Whenever dataset and algorithm is not provided for input files,
+        //      we fall back to using the default `<solution>.in` file
+        //
+        // Determine full file name
         
         do {
-            let fileManager = FileManager.default
+            let fileSystem = FileManager.default
+            // Validate and read file
+            var fileParts: [String] = [
+                Self.solution,
+                (!(dataset?.trimmingCharacters(in: .whitespaces).isEmpty ?? true)) ? String(describing: dataset!) : "",
+                (algorithm != nil) ? String(describing: algorithm!) : "",
+                type.rawValue
+            ]
             
-            var input: String? = nil
-            var output: String? = nil
-            
-            // Validate and read input file
-            guard fileManager.fileExists(atPath: "\(path).in") else {
-                print("Input file is missing! Aborting execution...")
-                return
-            }
-
-            input = try String(contentsOfFile: "\(path).in", encoding: .utf8)
-                .trimmingCharacters(in: .whitespacesAndNewlines)
-
-            // Validate and read output file
-            if fileManager.fileExists(atPath: "\(path).out") {
-                output = try String(contentsOfFile: "\(path).out", encoding: .utf8)
-                    .trimmingCharacters(in: .whitespacesAndNewlines)
-            } else if isTest {
-                print("> Output file is missing!")
-            }
-            
-            self.arrange(input!, output)
-        }
-        catch let error as NSError {
-            print("> Something went wrong while reading files: \(error)")
-        }
-    }
-    
-    
-    mutating func execute(scenarios: [String]?) {
-        var passedAllScenarios = true
-        
-        if let scenarios = scenarios {
-            for scenario in scenarios {
-                passedAllScenarios = passedAllScenarios && self.runTest(scenario: scenario)
-            }
-        }
-        
-        if passedAllScenarios {
-            self.solve()
-        } else {
-            print("Skipped solution execution! Test cases failed.")
-        }
-    }
-    
-    mutating func runTest(scenario: String) -> Bool {
-        // Step 1: Arrange data
-        self.readFile(scenario: scenario)
-        
-        // Step 2: Act (with assertion within)
-        let assertion = self.assert()[0]
-
-        // Step 3: Assert (by showing unit test results)
-        if assertion.isSuccessful {
-            print("Test \(scenario) executed successfully!")
-        } else {
-            print("Something went wrong with test \(scenario)...")
-            print("Test data:")
-            print(assertion.input)
-            print("Expected \(String(describing: assertion.expectedOutput)), got \(assertion.actualOutput)")
-        }
-        
-        self.testCases.removeAll()
-        
-        return assertion.isSuccessful
-    }
-    
-    func solve() {
-        // Step 1: Arrange data
-        self.readFile(scenario: nil, isTest: false)
-        
-        // Step 2: Act
-        let solution = self.act(self.testCases[0].input)
+            while (!fileSystem.fileExists(atPath: "\(Self.basePath)/\(fileParts.joined(separator: "."))") && fileParts.count > 1) {
+//                print("file >\(Self.basePath)/\(fileParts.joined(separator: "."))< does not exist")
                 
-        // Step 3: Assert (if tests were executed successfully, this should be correct)
-        print("Solution is: \(solution)")
+                fileParts.remove(at: fileParts.count - 2)
+            }
+            
+//            print("Reading file >\(Self.basePath)/\(fileParts.joined(separator: "."))<")
+            return try String(contentsOfFile: "\(Self.basePath)/\(fileParts.joined(separator: "."))")
+        } catch let error as NSError {
+            print("Something went wrong while reading file ()! \(error)")
+            throw error
+        }
+    }
+    
+    mutating func actAll() {
+        for (index, test) in self.datasets.enumerated() {
+            self.datasets[index].actualOutput = self.act(test.input, algorithm: test.algorithm as! Self.Algorithms)
+        }
+    }
+    
+    func assertAll() -> Bool {
+        return self.datasets
+            .map { $0.expectedOutput == $0.actualOutput }
+            .allSatisfy { $0 }
+    }
+    
+    mutating func execute() {
+        if selectedAlgorithms.count == 0 {
+            selectedAlgorithms = Array(Algorithms.allCases)
+        }
+        
+        self.selectedAlgorithms.forEach { algorithm in
+            print("Running tests for algorithm \(algorithm)...")
+            
+            // Step 1: Assemble
+            self.assembleAll(algorithm: algorithm)
+            
+//            print(self.datasets)
+            
+            // Step 2: Act
+            self.actAll()
+            
+//            print(self.datasets)
+            
+            // Step 3: Assert
+            let isSuccessfulTests = self.assertAll()
+            
+            if isSuccessfulTests {
+                print("Tests executed successfully! Executing real data...")
+                self.solve(algorithm: algorithm)
+            } else {
+                print("Skipped solution execution! Test cases failed:")
+                
+                self.datasets.forEach { dataset in
+                    print("Expected \(dataset.expectedOutput!); got \(dataset.actualOutput!)")
+                }
+            }
+            
+            print()
+        }
+    }
+    
+    func solve(algorithm: Algorithms) {
+        do {
+            // Step 1: Assemble
+            let inputData = try readDataSet(type: .input)
+            let assembled = assemble(inputData, nil)
+            
+            // Step 2: Act
+            let result = self.act(assembled.0, algorithm: algorithm)
+            
+            // Step 3: Assert (show result)
+            print("> Using algorithm \(algorithm), output: \(result)")
+        } catch let error as NSError {
+            print("Something went wrong with the actual scenario... \(error)")
+        }
     }
 }

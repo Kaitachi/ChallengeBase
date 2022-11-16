@@ -8,20 +8,22 @@
 import Foundation
 
 protocol Solution {
+    associatedtype Algorithms: RawRepresentable & CaseIterable where Algorithms.RawValue: StringProtocol
     associatedtype Input
     associatedtype Output: Equatable
-    typealias TestCase = (input: Input, output: Output?)
-    typealias TestResult = (input: Input, expectedOutput: Output?, actualOutput: Output, isSuccessful: Bool)
 
-    /// Collection of Test Cases for this Solution
-    var testCases: [TestCase] { get set }
+    /// Collection of Test Cases to be performed for this Solution
+    var datasets: [TestCase<Input, Output>] { get set }
     
     /// Receives Test Case data from input and (optional) output files and transforms them into TestCase objects (easier to act upon)
-    func arrange(_ input: String, _ output: String?)
+    func assemble(_ input: String, _ output: String?) -> (Input, Output?)
     
     /// Performs a single Run
-    func act(_ input: Input) -> Output
+    func act(_ input: Input, algorithm: Algorithms) -> Output
     
-    /// Performs all Tests
-    func assert() -> [TestResult]
+    /// Collection of DataSets to be used for testing against
+    var selectedDatasets: [String] { get set }
+    
+    /// Collection of Algorithms to be executed on top of our datasets
+    var selectedAlgorithms: [Algorithms] { get set }
 }

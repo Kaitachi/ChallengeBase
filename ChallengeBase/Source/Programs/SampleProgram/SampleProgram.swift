@@ -7,15 +7,17 @@
 
 import Foundation
 
-enum SampleProgram_Algorithms : String {
+enum SampleProgram_Algorithms : String, CaseIterable {
     case part01
     case part02
 }
 
 class SampleProgram : ChallengeSettings {
-    typealias algorithms = SampleProgram_Algorithms
+    typealias Algorithms = SampleProgram_Algorithms
     
     static var challengeName: String {
         get { return "SampleProgram" }
     }
+    
+    var scenarios: [SampleProgram_Algorithms]?
 }

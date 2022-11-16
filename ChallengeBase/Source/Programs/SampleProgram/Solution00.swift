@@ -8,30 +8,33 @@
 import Foundation
 
 class Solution00 : SampleProgram, Solution {
+    typealias Algorithms = SampleProgram_Algorithms
     typealias Input = [Int]
     typealias Output = Int
     
-    var testCases: [TestCase] = []
-    var algorithm: algorithms
+    var datasets: [TestCase<Input, Output>] = []
+    var selectedDatasets: [String]
+    var selectedAlgorithms: [SampleProgram_Algorithms]
     
-    init(algorithm: algorithms) {
-        self.algorithm = algorithm
+    init(datasets: [String] = [], algorithms: [Algorithms] = []) {
+        self.selectedDatasets = datasets
+        self.selectedAlgorithms = algorithms
     }
-
-    // Step 1: Arrange
-    func arrange(_ input: String, _ output: String? = nil) {
+    
+    // Step 1: Assemble
+    func assemble(_ input: String, _ output: String? = nil) -> (Input, Output?) {
         let depths = input.components(separatedBy: "\n")
             .filter { $0 != "" }
             .map { Int($0)! }
        
-        let increases = Int(output ?? "")
+        let increases = Int(output?.trimmingCharacters(in: .whitespacesAndNewlines) ?? "")
                 
-        testCases.append((depths, increases))
+        return (depths, increases)
     }
     
     // Step 2: Act
-    func act(_ input: Input) -> Output {
-        switch self.algorithm {
+    func act(_ input: Input, algorithm: Algorithms) -> Output {
+        switch algorithm {
         case .part01:
             return part01(input)
         case .part02:

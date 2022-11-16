@@ -7,7 +7,7 @@
 
 import Foundation
 
-var solution = Solution00(algorithm: .part01)
-let scenarios = ["part01"]
+let datasets = ["example"]
+var solution = Solution00(datasets: datasets, algorithms: [.part01, .part02])
 
-solution.execute(scenarios: scenarios)
+solution.execute()
