@@ -23,9 +23,7 @@ class Solution00 : SampleProgram, Solution {
     
     // Step 1: Assemble
     func assemble(_ input: String, _ output: String? = nil) -> (Input, Output?) {
-        let depths = input.components(separatedBy: "\n")
-            .filter { $0 != "" }
-            .map { Int($0)! }
+        let depths = input.integerList()
        
         let increases = Int(output?.trimmingCharacters(in: .whitespacesAndNewlines) ?? "")
                 
