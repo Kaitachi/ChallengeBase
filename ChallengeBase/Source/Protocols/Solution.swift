@@ -30,5 +30,9 @@ protocol Solution : Challenge {
     func act(_ input: Input, algorithm: Algorithms) -> Output
     
     // MARK: - Extension Methods
+    /// Executes all configured Test Cases and Algorithms (plus actual solve, if test cases are successful)
+    mutating func execute()
     
+    /// Outputs the solution to the given Algorithm
+    func solve(algorithm: Algorithms)
 }
