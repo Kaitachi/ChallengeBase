@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol Testable {
+public protocol Testable {
     // MARK: - Associated Types
     associatedtype Input
     associatedtype Output: Equatable
@@ -22,17 +22,17 @@ protocol Testable {
     var isSuccessful: Bool { get }
 }
 
-struct TestCase<Input, Output> : Testable where Output : Equatable {
-    var algorithm: any RawRepresentable
-    var input: Input
-    var output: Output?
-    var actualOutput: Output?
+public struct TestCase<Input, Output> : Testable where Output : Equatable {
+    public var algorithm: any RawRepresentable
+    public var input: Input
+    public var output: Output?
+    public var actualOutput: Output?
 
-    var expectedOutput: Output? {
+    public var expectedOutput: Output? {
         get { return self.output }
     }
         
-    var isSuccessful: Bool {
+    public var isSuccessful: Bool {
         get { return self.expectedOutput == actualOutput }
     }
 }

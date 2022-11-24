@@ -12,7 +12,7 @@ enum ResourceExtensions : String {
     case output = "out"
 }
 
-protocol Solution : Challenge {
+public protocol Solution : Challenge {
     // MARK: - Associated Types
     associatedtype Input
     associatedtype Output: Equatable

@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol Challenge {
+public protocol Challenge {
     // MARK: - Associated Types
     associatedtype Algorithms: RawRepresentable & CaseIterable where Algorithms.RawValue: StringProtocol
     associatedtype Solutions: RawRepresentable & CaseIterable where Solutions.RawValue: StringProtocol
