@@ -76,7 +76,7 @@ public extension Solution where Self: Challenge & Solution {
         }
     }
     
-    func readDataSet(type: ResourceExtensions, named dataset: String? = nil, algorithm: Algorithms? = nil) throws -> String {
+    internal func readDataSet(type: ResourceExtensions, named dataset: String? = nil, algorithm: Algorithms? = nil) throws -> String {
         // Lets assume the following regarding the files being used...
         //
         // 1. File formats should be:
