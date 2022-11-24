@@ -7,16 +7,19 @@
 
 import Foundation
 
-enum FileTypes : String {
+enum ResourceExtensions : String {
     case input = "in"
     case output = "out"
 }
 
-extension Solution where Self: ChallengeSettings & Solution {
-    static var solution: String {
-        get { return String(describing: self) }
+extension Solution where Self: Challenge & Solution {
+    var qualifiedName: String {
+        get { return "\(Self.name).\(String(describing: Self.self))" }
     }
     
+    var solution: String {
+        get { return String(describing: Self.self) }
+    }
     
     /// Logic to assemble all scenarios parting from the selected datasets, broken down one by one
     mutating func assembleAll(algorithm: Algorithms) {
@@ -41,7 +44,7 @@ extension Solution where Self: ChallengeSettings & Solution {
         }
     }
     
-    func readDataSet(type: FileTypes, named dataset: String? = nil, algorithm: Algorithms? = nil) throws -> String {
+    func readDataSet(type: ResourceExtensions, named dataset: String? = nil, algorithm: Algorithms? = nil) throws -> String {
         // Lets assume the following regarding the files being used...
         //
         // 1. File formats should be:
@@ -54,26 +57,28 @@ extension Solution where Self: ChallengeSettings & Solution {
         //
         // Determine full file name
         
+        // File name parts
+        var resourceFile: [String] = [
+            self.solution,
+            (!(dataset?.trimmingCharacters(in: .whitespaces).isEmpty ?? true)) ? String(describing: dataset!) : "",
+            (algorithm != nil) ? String(describing: algorithm!) : "",
+            type.rawValue
+        ]
+            
         do {
             let fileSystem = FileManager.default
+           
             // Validate and read file
-            var fileParts: [String] = [
-                Self.solution,
-                (!(dataset?.trimmingCharacters(in: .whitespaces).isEmpty ?? true)) ? String(describing: dataset!) : "",
-                (algorithm != nil) ? String(describing: algorithm!) : "",
-                type.rawValue
-            ]
-            
-            while (!fileSystem.fileExists(atPath: "\(Self.basePath)/\(fileParts.joined(separator: "."))") && fileParts.count > 1) {
-//                print("file >\(Self.basePath)/\(fileParts.joined(separator: "."))< does not exist")
+            while (!fileSystem.fileExists(atPath: "\(Self.basePath)/\(resourceFile.asResourceName)") && resourceFile.count > 1) {
+//                print("file >\(Self.basePath)/\(resourceFile.asResourceName)< does not exist")
                 
-                fileParts.remove(at: fileParts.count - 2)
+                resourceFile.remove(at: resourceFile.count - 2)
             }
             
-//            print("Reading file >\(Self.basePath)/\(fileParts.joined(separator: "."))<")
-            return try String(contentsOfFile: "\(Self.basePath)/\(fileParts.joined(separator: "."))")
+//            print("Reading file >\(Self.basePath)/\(resourceFile.joined(separator: "."))<")
+            return try String(contentsOfFile: "\(Self.basePath)/\(resourceFile.asResourceName)")
         } catch let error as NSError {
-            print("Something went wrong while reading file ()! \(error)")
+            print("Something went wrong while reading file \(resourceFile.asResourceName)! \(error)")
             throw error
         }
     }
@@ -96,7 +101,7 @@ extension Solution where Self: ChallengeSettings & Solution {
         }
         
         self.selectedAlgorithms.forEach { algorithm in
-            print("Running tests for algorithm \(algorithm)...")
+            print("Running \(self.qualifiedName) using algorithm \(algorithm)...")
             
             self.datasets = []
             

@@ -12,6 +12,7 @@ class Solution00 : SampleProgram, Solution {
     typealias Input = [Int]
     typealias Output = Int
     
+    var scenarios: [SampleProgram_Algorithms]? = []
     var datasets: [TestCase<Input, Output>] = []
     var selectedDatasets: [String]
     var selectedAlgorithms: [SampleProgram_Algorithms]

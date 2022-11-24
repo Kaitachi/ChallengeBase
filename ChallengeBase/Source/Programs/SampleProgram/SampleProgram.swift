@@ -12,12 +12,14 @@ enum SampleProgram_Algorithms : String, CaseIterable {
     case part02
 }
 
-class SampleProgram : ChallengeSettings {
+protocol SampleProgram : Challenge {
+    var scenarios: [SampleProgram_Algorithms]? { get set }
+}
+
+extension SampleProgram {
     typealias Algorithms = SampleProgram_Algorithms
     
-    static var challengeName: String {
+    static var name: String {
         get { return "SampleProgram" }
     }
-    
-    var scenarios: [SampleProgram_Algorithms]?
 }
