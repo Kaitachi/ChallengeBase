@@ -42,7 +42,7 @@ public protocol Solution : Challenge {
     func solve(algorithm: Algorithms)
 }
 
-extension Solution where Self: Challenge & Solution {
+public extension Solution where Self: Challenge & Solution {
     // MARK: - Computed Properties
     var qualifiedName: String {
         get { return "\(self.name).\(String(describing: type(of: self)))" }

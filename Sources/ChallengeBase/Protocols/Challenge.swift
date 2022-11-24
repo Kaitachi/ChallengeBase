@@ -23,7 +23,7 @@ public protocol Challenge {
     static func create(_ solution: Solutions, datasets: [String], algorithms: [Algorithms]) -> any Solution
 }
 
-extension Challenge {
+public extension Challenge {
     var baseResourcePath: String {
         get {
             return #file.replacingOccurrences(of: "Source/Protocols/Challenge.swift", with: "Resources/\(self.name)")
