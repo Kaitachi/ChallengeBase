@@ -19,7 +19,9 @@ protocol SampleChallenge : Challenge {
 extension SampleChallenge {
     typealias Algorithms = SampleChallenge_Algorithms
     
-    static var name: String {
+    var name: String {
         get { return "SampleChallenge" }
     }
+    
+    
 }

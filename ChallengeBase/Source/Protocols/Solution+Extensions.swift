@@ -14,11 +14,11 @@ enum ResourceExtensions : String {
 
 extension Solution where Self: Challenge & Solution {
     var qualifiedName: String {
-        get { return "\(Self.name).\(String(describing: Self.self))" }
+        get { return "\(self.name).\(String(describing: type(of: self)))" }
     }
     
     var solution: String {
-        get { return String(describing: Self.self) }
+        get { return String(describing: type(of: self)) }
     }
     
     /// Logic to assemble all scenarios parting from the selected datasets, broken down one by one
@@ -69,14 +69,14 @@ extension Solution where Self: Challenge & Solution {
             let fileSystem = FileManager.default
            
             // Validate and read file
-            while (!fileSystem.fileExists(atPath: "\(Self.basePath)/\(resourceFile.asResourceName)") && resourceFile.count > 1) {
-//                print("file >\(Self.basePath)/\(resourceFile.asResourceName)< does not exist")
+            while (!fileSystem.fileExists(atPath: "\(self.basePath)/\(resourceFile.asResourceName)") && resourceFile.count > 1) {
+//                print("file >\(self.basePath)/\(resourceFile.asResourceName)< does not exist")
                 
                 resourceFile.remove(at: resourceFile.count - 2)
             }
             
-//            print("Reading file >\(Self.basePath)/\(resourceFile.joined(separator: "."))<")
-            return try String(contentsOfFile: "\(Self.basePath)/\(resourceFile.asResourceName)")
+//            print("Reading file >\(self.basePath)/\(resourceFile.joined(separator: "."))<")
+            return try String(contentsOfFile: "\(self.basePath)/\(resourceFile.asResourceName)")
         } catch let error as NSError {
             print("Something went wrong while reading file \(resourceFile.asResourceName)! \(error)")
             throw error

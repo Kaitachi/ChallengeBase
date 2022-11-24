@@ -8,13 +8,13 @@
 import Foundation
 
 protocol Challenge {
-    static var basePath: String { get }
+    var basePath: String { get }
     
-    static var name: String { get }
+    var name: String { get }
 }
 
 extension Challenge {
-    static var basePath: String {
+    var basePath: String {
         get {
             return #file.replacingOccurrences(of: "Source/Protocols/Challenge.swift", with: "Resources/\(self.name)")
         }
