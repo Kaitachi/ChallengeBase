@@ -8,9 +8,11 @@
 import Foundation
 
 protocol Testable {
+    // MARK: - Associated Types
     associatedtype Input
     associatedtype Output: Equatable
     
+    // MARK: - Properties
     var input: Input { get }
     var output: Output? { get set }
     

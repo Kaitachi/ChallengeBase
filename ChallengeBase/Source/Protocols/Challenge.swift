@@ -8,13 +8,19 @@
 import Foundation
 
 protocol Challenge {
-    var basePath: String { get }
+    // MARK: - Associated Types
+    associatedtype Algorithms: RawRepresentable & CaseIterable where Algorithms.RawValue: StringProtocol
     
+    // MARK: - Properties
+    /// Base path for current Challenge
+    var baseResourcePath: String { get }
+    
+    /// Current Challenge name
     var name: String { get }
 }
 
 extension Challenge {
-    var basePath: String {
+    var baseResourcePath: String {
         get {
             return #file.replacingOccurrences(of: "Source/Protocols/Challenge.swift", with: "Resources/\(self.name)")
         }

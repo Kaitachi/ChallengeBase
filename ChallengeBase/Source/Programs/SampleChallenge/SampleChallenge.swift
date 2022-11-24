@@ -12,16 +12,11 @@ enum SampleChallenge_Algorithms : String, CaseIterable {
     case part02
 }
 
-protocol SampleChallenge : Challenge {
-    var scenarios: [SampleChallenge_Algorithms]? { get set }
+protocol SampleChallenge : Challenge where Algorithms == SampleChallenge_Algorithms {
 }
 
 extension SampleChallenge {
-    typealias Algorithms = SampleChallenge_Algorithms
-    
     var name: String {
         get { return "SampleChallenge" }
     }
-    
-    
 }

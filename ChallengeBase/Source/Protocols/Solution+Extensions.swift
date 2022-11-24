@@ -13,6 +13,7 @@ enum ResourceExtensions : String {
 }
 
 extension Solution where Self: Challenge & Solution {
+    // MARK: - Computed Properties
     var qualifiedName: String {
         get { return "\(self.name).\(String(describing: type(of: self)))" }
     }
@@ -21,10 +22,11 @@ extension Solution where Self: Challenge & Solution {
         get { return String(describing: type(of: self)) }
     }
     
+    // MARK: - Assemble Methods
     /// Logic to assemble all scenarios parting from the selected datasets, broken down one by one
     mutating func assembleAll(algorithm: Algorithms) {
-        self.selectedDatasets.forEach { dataset in
-            self.datasets.append(assembleSingle(dataset, algorithm)!)
+        self.selectedResourceSets.forEach { dataset in
+            self.testCases.append(assembleSingle(dataset, algorithm)!)
         }
     }
     
@@ -69,28 +71,30 @@ extension Solution where Self: Challenge & Solution {
             let fileSystem = FileManager.default
            
             // Validate and read file
-            while (!fileSystem.fileExists(atPath: "\(self.basePath)/\(resourceFile.asResourceName)") && resourceFile.count > 1) {
+            while (!fileSystem.fileExists(atPath: "\(self.baseResourcePath)/\(resourceFile.asResourceName)") && resourceFile.count > 1) {
 //                print("file >\(self.basePath)/\(resourceFile.asResourceName)< does not exist")
                 
                 resourceFile.remove(at: resourceFile.count - 2)
             }
             
 //            print("Reading file >\(self.basePath)/\(resourceFile.joined(separator: "."))<")
-            return try String(contentsOfFile: "\(self.basePath)/\(resourceFile.asResourceName)")
+            return try String(contentsOfFile: "\(self.baseResourcePath)/\(resourceFile.asResourceName)")
         } catch let error as NSError {
             print("Something went wrong while reading file \(resourceFile.asResourceName)! \(error)")
             throw error
         }
     }
     
+    // MARK: - Act Methods
     mutating func actAll() {
-        for (index, test) in self.datasets.enumerated() {
-            self.datasets[index].actualOutput = self.act(test.input, algorithm: test.algorithm as! Self.Algorithms)
+        for (index, test) in self.testCases.enumerated() {
+            self.testCases[index].actualOutput = self.act(test.input, algorithm: test.algorithm as! Self.Algorithms)
         }
     }
     
+    // MARK: - Assert Methods
     func assertAll() -> Bool {
-        return self.datasets
+        return self.testCases
             .map { $0.expectedOutput == $0.actualOutput }
             .allSatisfy { $0 }
     }
@@ -103,7 +107,7 @@ extension Solution where Self: Challenge & Solution {
         self.selectedAlgorithms.forEach { algorithm in
             print("Running \(self.qualifiedName) using algorithm \(algorithm)...")
             
-            self.datasets = []
+            self.testCases = []
             
             // Step 1: Assemble
             self.assembleAll(algorithm: algorithm)
@@ -124,7 +128,7 @@ extension Solution where Self: Challenge & Solution {
             } else {
                 print("Skipped solution execution! Test cases failed:")
                 
-                self.datasets.forEach { dataset in
+                self.testCases.forEach { dataset in
                     print("Expected \(dataset.expectedOutput!); got \(dataset.actualOutput!)")
                 }
             }

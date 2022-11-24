@@ -8,20 +8,22 @@
 import Foundation
 
 class Solution00 : SampleChallenge, Solution {
-    typealias Algorithms = SampleChallenge_Algorithms
+    // MARK: - Type Aliases
     typealias Input = [Int]
     typealias Output = Int
     
-    var scenarios: [SampleChallenge_Algorithms]? = []
-    var datasets: [TestCase<Input, Output>] = []
-    var selectedDatasets: [String]
-    var selectedAlgorithms: [SampleChallenge_Algorithms]
+    // MARK: - Properties
+    var testCases: [TestCase<Input, Output>] = []
+    var selectedResourceSets: [String]
+    var selectedAlgorithms: [Algorithms]
     
+    // MARK: - Initializers
     init(datasets: [String] = [], algorithms: [Algorithms] = []) {
-        self.selectedDatasets = datasets
+        self.selectedResourceSets = datasets
         self.selectedAlgorithms = algorithms
     }
     
+    // MARK: - Solution Methods
     // Step 1: Assemble
     func assemble(_ input: String, _ output: String? = nil) -> (Input, Output?) {
         let depths = input.integerList()
@@ -41,6 +43,7 @@ class Solution00 : SampleChallenge, Solution {
         }
     }
     
+    // MARK: - Logic Methods
     func part01(_ depths: Input) -> Output {
         // Let's store our previous depth
         var prev: Int = depths[0]
