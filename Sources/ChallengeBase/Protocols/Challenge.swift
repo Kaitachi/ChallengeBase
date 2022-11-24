@@ -13,6 +13,9 @@ public protocol Challenge {
     associatedtype Solutions: RawRepresentable & CaseIterable where Solutions.RawValue: StringProtocol
     
     // MARK: - Properties
+    /// Path for current Challenge file
+    var baseChallengePath: String { get }
+    
     /// Base path for current Challenge
     var baseResourcePath: String { get }
     
@@ -26,7 +29,8 @@ public protocol Challenge {
 public extension Challenge {
     var baseResourcePath: String {
         get {
-            return #file.replacingOccurrences(of: "Source/Protocols/Challenge.swift", with: "Resources/\(self.name)")
+            return self.baseChallengePath
+                .replacingOccurrences(of: "Source/Protocols/Challenge.swift", with: "Resources/\(self.name)")
         }
     }
 }
