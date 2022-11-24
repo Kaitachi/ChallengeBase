@@ -1,5 +1,5 @@
 public struct ChallengeBase {
-    public private(set) var text = "Hello, World!"
+    public private(set) var text = "Hello, ChallengeBase!"
 
     public init() {
     }
