@@ -12,11 +12,22 @@ enum SampleChallenge_Algorithms : String, CaseIterable {
     case part02
 }
 
-protocol SampleChallenge : Challenge where Algorithms == SampleChallenge_Algorithms {
+enum SampleChallenge_Solutions : String, CaseIterable {
+    case Solution00
 }
 
-extension SampleChallenge {
+class SampleChallenge : Challenge {
+    typealias Algorithms = SampleChallenge_Algorithms
+    typealias Solutions = SampleChallenge_Solutions
+        
     var name: String {
         get { return "SampleChallenge" }
+    }
+    
+    static func create(_ solution: Solutions, datasets: [String] = [], algorithms: [Algorithms] = []) -> any Solution {
+        switch solution {
+        case .Solution00:
+            return SampleChallenge.Solution00(datasets: datasets, algorithms: algorithms)
+        }
     }
 }

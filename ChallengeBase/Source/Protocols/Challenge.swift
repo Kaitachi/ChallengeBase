@@ -10,6 +10,7 @@ import Foundation
 protocol Challenge {
     // MARK: - Associated Types
     associatedtype Algorithms: RawRepresentable & CaseIterable where Algorithms.RawValue: StringProtocol
+    associatedtype Solutions: RawRepresentable & CaseIterable where Solutions.RawValue: StringProtocol
     
     // MARK: - Properties
     /// Base path for current Challenge
@@ -17,6 +18,9 @@ protocol Challenge {
     
     /// Current Challenge name
     var name: String { get }
+    
+    // MARK: - Methods
+    static func create(_ solution: Solutions, datasets: [String], algorithms: [Algorithms]) -> any Solution
 }
 
 extension Challenge {
