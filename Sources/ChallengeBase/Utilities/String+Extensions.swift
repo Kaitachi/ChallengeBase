@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension String {
+public extension String {
     func integerList() -> [Int] {
         return self.components(separatedBy: "\n")
             .filter { $0 != "" }

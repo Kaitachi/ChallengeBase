@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension Array where Element == String {
+public extension Array where Element == String {
     var asResourceName: String {
         get {
             return self.joined(separator: ".")
@@ -15,7 +15,7 @@ extension Array where Element == String {
     }
 }
 
-extension Array where Element == AnyObject {
+public extension Array where Element == AnyObject {
     func cartesianProduct<V>(with rhs: Array<V>) -> [(Element, V)] {
         var prod: [(Element, V)] = []
         
