@@ -20,8 +20,6 @@ extension Solution where Self: ChallengeSettings & Solution {
     
     /// Logic to assemble all scenarios parting from the selected datasets, broken down one by one
     mutating func assembleAll(algorithm: Algorithms) {
-        self.datasets = []
-        
         self.selectedDatasets.forEach { dataset in
             self.datasets.append(assembleSingle(dataset, algorithm)!)
         }
@@ -99,6 +97,8 @@ extension Solution where Self: ChallengeSettings & Solution {
         
         self.selectedAlgorithms.forEach { algorithm in
             print("Running tests for algorithm \(algorithm)...")
+            
+            self.datasets = []
             
             // Step 1: Assemble
             self.assembleAll(algorithm: algorithm)
