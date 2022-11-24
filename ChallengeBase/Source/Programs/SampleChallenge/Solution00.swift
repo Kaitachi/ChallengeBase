@@ -7,15 +7,15 @@
 
 import Foundation
 
-class Solution00 : SampleProgram, Solution {
-    typealias Algorithms = SampleProgram_Algorithms
+class Solution00 : SampleChallenge, Solution {
+    typealias Algorithms = SampleChallenge_Algorithms
     typealias Input = [Int]
     typealias Output = Int
     
-    var scenarios: [SampleProgram_Algorithms]? = []
+    var scenarios: [SampleChallenge_Algorithms]? = []
     var datasets: [TestCase<Input, Output>] = []
     var selectedDatasets: [String]
-    var selectedAlgorithms: [SampleProgram_Algorithms]
+    var selectedAlgorithms: [SampleChallenge_Algorithms]
     
     init(datasets: [String] = [], algorithms: [Algorithms] = []) {
         self.selectedDatasets = datasets
