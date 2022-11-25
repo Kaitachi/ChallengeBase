@@ -15,7 +15,4 @@ public protocol Challenge {
     // MARK: - Properties
     /// Base path for current Challenge
     var baseResourcePath: String { get }
-    
-    // MARK: - Methods
-    static func create(_ solution: Solutions) -> any Solution
 }
