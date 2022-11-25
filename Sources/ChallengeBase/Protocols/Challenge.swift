@@ -13,9 +13,6 @@ public protocol Challenge {
     associatedtype Solutions: RawRepresentable & CaseIterable where Solutions.RawValue: StringProtocol
     
     // MARK: - Properties
-    /// Path for current Challenge file
-    var baseChallengePath: String { get }
-    
     /// Base path for current Challenge
     var baseResourcePath: String { get }
     

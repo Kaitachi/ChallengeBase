@@ -102,12 +102,12 @@ public extension Solution where Self: Challenge & Solution {
            
             // Validate and read file
             while (!fileSystem.fileExists(atPath: "\(self.baseResourcePath)/\(resourceFile.asResourceName)") && resourceFile.count > 1) {
-                print("file >\(self.baseResourcePath)/\(resourceFile.asResourceName)< does not exist")
+//                print("file >\(self.baseResourcePath)/\(resourceFile.asResourceName)< does not exist")
                 
                 resourceFile.remove(at: resourceFile.count - 2)
             }
             
-            print("Reading file >\(self.baseResourcePath)/\(resourceFile.joined(separator: "."))<")
+//            print("Reading file >\(self.baseResourcePath)/\(resourceFile.joined(separator: "."))<")
             return try String(contentsOfFile: "\(self.baseResourcePath)/\(resourceFile.asResourceName)")
         } catch let error as NSError {
             print("Something went wrong while reading file \(resourceFile.asResourceName)! \(error)")
