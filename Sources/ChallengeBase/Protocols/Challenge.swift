@@ -17,5 +17,5 @@ public protocol Challenge {
     var baseResourcePath: String { get }
     
     // MARK: - Methods
-    static func create(_ solution: Solutions, datasets: [String], algorithms: [Algorithms]) -> any Solution
+    static func create(_ solution: Solutions) -> any Solution
 }
