@@ -40,12 +40,26 @@ public protocol Solution : Challenge {
     
     /// Outputs the solution to the given Algorithm
     func solve(algorithm: Algorithms)
+    
+    // MARK: - Helper Methods
+    mutating func setResourceSets(_ resources: [String])
+    
+    mutating func setAlgorithms(_ algorithms: [Algorithms])
 }
 
 public extension Solution where Self: Challenge & Solution {
     // MARK: - Computed Properties
     var solution: String {
         get { return String(describing: type(of: self)) }
+    }
+    
+    // MARK: - Helper Methods
+    mutating func setResourceSets(_ resources: [String]) {
+        self.selectedResourceSets = resources
+    }
+    
+    mutating func setAlgorithms(_ algorithms: [Algorithms]) {
+        self.selectedAlgorithms = algorithms
     }
     
     // MARK: - Assemble Methods
