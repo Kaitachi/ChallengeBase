@@ -8,13 +8,13 @@
 import Foundation
 
 public extension String {
-    func integerList() -> [Int] {
-        return self.components(separatedBy: .newlines)
+    func integerList(separatedBy: CharacterSet = .newlines) -> [Int] {
+        return self.components(separatedBy: separatedBy)
             .compactMap { Int($0) }
     }
     
-    func doubleList() -> [Double] {
-        return self.components(separatedBy: .newlines)
+    func doubleList(separatedBy: CharacterSet = .newlines) -> [Double] {
+        return self.components(separatedBy: separatedBy)
             .compactMap { Double($0) }
     }
 }
