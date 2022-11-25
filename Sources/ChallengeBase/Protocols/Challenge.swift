@@ -26,8 +26,7 @@ public protocol Challenge {
 public extension Challenge {
     var baseResourcePath: String {
         get {
-            return self.baseChallengePath
-                .replacingOccurrences(of: "Source/Protocols/Challenge.swift", with: "Resources/\(self.name)")
+            return #file.replacingOccurrences(of: "Source/Protocols/Challenge.swift", with: "Resources/\(self.name)")
         }
     }
 }
