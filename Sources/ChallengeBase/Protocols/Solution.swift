@@ -44,10 +44,6 @@ public protocol Solution : Challenge {
 
 public extension Solution where Self: Challenge & Solution {
     // MARK: - Computed Properties
-    var qualifiedName: String {
-        get { return "\(self.name).\(String(describing: type(of: self)))" }
-    }
-    
     var solution: String {
         get { return String(describing: type(of: self)) }
     }
@@ -135,7 +131,7 @@ public extension Solution where Self: Challenge & Solution {
         }
         
         self.selectedAlgorithms.forEach { algorithm in
-            print("Running \(self.qualifiedName) using algorithm \(algorithm)...")
+            print("Running \(String(describing: self)) using algorithm \(algorithm)...")
             
             self.testCases = []
             

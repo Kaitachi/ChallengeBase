@@ -16,17 +16,6 @@ public protocol Challenge {
     /// Base path for current Challenge
     var baseResourcePath: String { get }
     
-    /// Current Challenge name
-    var name: String { get }
-    
     // MARK: - Methods
     static func create(_ solution: Solutions, datasets: [String], algorithms: [Algorithms]) -> any Solution
-}
-
-public extension Challenge {
-    var baseResourcePath: String {
-        get {
-            return #file.replacingOccurrences(of: "Source/Protocols/Challenge.swift", with: "Resources/\(self.name)")
-        }
-    }
 }
