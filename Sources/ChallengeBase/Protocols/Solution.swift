@@ -32,7 +32,7 @@ public protocol Solution : Challenge {
     func assemble(_ input: String, _ output: String?) -> (Input, Output?)
     
     /// Performs a single Run
-    func act(_ input: Input, algorithm: Algorithms) -> Output
+    func activate(_ input: Input, algorithm: Algorithms) -> Output
     
     // MARK: - Extension Methods
     /// Executes all configured Test Cases and Algorithms (plus actual solve, if test cases are successful)
@@ -125,10 +125,10 @@ public extension Solution where Self: Challenge & Solution {
         }
     }
     
-    // MARK: - Act Methods
-    mutating func actAll() {
+    // MARK: - Activate Methods
+    mutating func activateAll() {
         for (index, test) in self.testCases.enumerated() {
-            self.testCases[index].actualOutput = self.act(test.input, algorithm: test.algorithm as! Self.Algorithms)
+            self.testCases[index].actualOutput = self.activate(test.input, algorithm: test.algorithm as! Self.Algorithms)
         }
     }
     
@@ -154,8 +154,8 @@ public extension Solution where Self: Challenge & Solution {
             
 //            print(self.datasets)
             
-            // Step 2: Act
-            self.actAll()
+            // Step 2: Activate
+            self.activateAll()
             
 //            print(self.datasets)
             
@@ -183,8 +183,8 @@ public extension Solution where Self: Challenge & Solution {
             let inputData = try readDataSet(type: .input)
             let assembled = assemble(inputData, nil)
             
-            // Step 2: Act
-            let result = self.act(assembled.0, algorithm: algorithm)
+            // Step 2: Activate
+            let result = self.activate(assembled.0, algorithm: algorithm)
             
             // Step 3: Assert (show result)
             print("> Using algorithm \(algorithm), output: \(result)")
