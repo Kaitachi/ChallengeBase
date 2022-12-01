@@ -13,6 +13,7 @@ public protocol Testable {
     associatedtype Output: Equatable
     
     // MARK: - Properties
+    var name: String { get set }
     var input: Input { get }
     var output: Output? { get set }
     
@@ -23,6 +24,7 @@ public protocol Testable {
 }
 
 public struct TestCase<Input, Output> : Testable where Output : Equatable {
+    public var name: String
     public var algorithm: any RawRepresentable
     public var input: Input
     public var output: Output?

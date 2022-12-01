@@ -79,7 +79,7 @@ public extension Solution where Self: Challenge & Solution {
             let assembled = assemble(inputData, outputData)
         
             // Wrap assembled Dataset as a TestCase object
-            return TestCase<Input, Output>(algorithm: algorithm, input: assembled.0, output: assembled.1)
+            return TestCase<Input, Output>(name: dataset, algorithm: algorithm, input: assembled.0, output: assembled.1)
         } catch let error as NSError {
             print("Something went wrong whilst attempting to assemble scenarios... \(error)")
             return nil
@@ -163,13 +163,21 @@ public extension Solution where Self: Challenge & Solution {
             let isSuccessfulTests = self.assertAll()
             
             if isSuccessfulTests {
-                print("Tests executed successfully! Executing real data...")
+                if self.testCases.count == 0 {
+                    print("No Test Cases were provided! Executing real data...")
+                } else {
+                    print("Test Cases executed successfully! Executing real data...")
+                }
+
                 self.solve(algorithm: algorithm)
             } else {
                 print("Skipped solution execution! Test cases failed:")
                 
                 self.testCases.forEach { dataset in
-                    print("Expected \(dataset.expectedOutput!); got \(dataset.actualOutput!)")
+                    if !dataset.isSuccessful {
+                        print("Using Algorithm \(dataset.algorithm), Test Case \(dataset.name)")
+                        print("Expected \(dataset.expectedOutput!); got \(dataset.actualOutput!)")
+                    }
                 }
             }
             
