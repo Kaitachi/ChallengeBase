@@ -29,7 +29,7 @@ public protocol Solution : Challenge {
     
     // MARK: - Solution Methods
     /// Receives Test Case data from input and (optional) output files and transforms them into TestCase objects (easier to act upon)
-    func assemble(_ input: String, _ output: String?) -> (Input, Output?)
+    func assemble(_ rawInput: String, _ rawOutput: String?) -> (Input, Output?)
     
     /// Performs a single Run
     func activate(_ input: Input, algorithm: Algorithms) -> Output
