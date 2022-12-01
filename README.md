@@ -49,3 +49,8 @@ NOTE: This package doesn't add a huge variety of utility methods. This is done p
 
 ## Want to Contribute?
 Contributions are by all means allowed and encouraged here! It is likely that things can be improved for readability, comments explaining how certain parts of the code work, or even to Swift-ify things around. Whatever improvement you see, it will be more than welcome.
+
+* [Challenge Base Project](https://github.com/Kaitachi/ChallengeBase) (this Repo), the Package behind this whole initiative to streamline Coding Challenges, reducing boilerplate code and logic.
+* [Challenge Template Files](https://github.com/Kaitachi/ChallengeTemplates), provides various Swift Template files that can be used along with this Project.
+* [Challenge Starter Project](https://github.com/Kaitachi/ChallengeStarter), any improvements to streamline the Challenge setup is greatly welcome.
+
