@@ -176,7 +176,11 @@ public extension Solution where Self: Challenge & Solution {
                 self.testCases.forEach { dataset in
                     if !dataset.isSuccessful {
                         print("Using Algorithm \(dataset.algorithm), Test Case \(dataset.name)")
-                        print("Expected \(dataset.expectedOutput!); got \(dataset.actualOutput!)")
+                        print("Expected ", terminator: "")
+                        printSolution(for: dataset.expectedOutput!)
+                        print()
+                        print("Got ", terminator: "")
+                        printSolution(for: dataset.actualOutput!)
                     }
                 }
             }
@@ -195,9 +199,22 @@ public extension Solution where Self: Challenge & Solution {
             let result = self.activate(assembled.0, algorithm: algorithm)
             
             // Step 3: Assert (show result)
-            print("> Using algorithm \(algorithm), output: \(result)")
+            print("> Using algorithm \(algorithm), output: ", terminator: "")
+            printSolution(for: result)
         } catch let error as NSError {
             print("Something went wrong with the actual scenario... \(error)")
+        }
+    }
+    
+    func printSolution(for output: Output) {
+        if let array = output as? Array<Any> {
+            print()
+            
+            for line in array {
+                print("\t\t \(line)")
+            }
+        } else {
+            print(output)
         }
     }
 }
